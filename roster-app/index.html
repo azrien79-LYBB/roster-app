@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ms">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Concierge Duty Roster</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="title-block">
+        <span class="eyebrow">Concierge Duty Roster</span>
+        <h1 id="pageTitle">Roster July 2026</h1>
+      </div>
+      <div class="toolbar" aria-label="Roster controls">
+        <label class="field compact"><span>Bulan</span><select id="monthSelect"></select></label>
+        <label class="field year-field"><span>Tahun</span><input id="yearInput" type="number" min="2024" max="2035" value="2026" /></label>
+        <label class="toggle"><input id="lockToggle" type="checkbox" checked /><span>Kunci AL/WO</span></label>
+        <button id="generateBtn" class="primary" type="button">Generate Schedule</button>
+        <button id="resetBtn" type="button">Reset Bulan</button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="summary-grid" aria-label="Dashboard">
+        <article class="metric-card"><span class="metric-label">Konflik Aktif</span><strong id="conflictCount">0</strong><small id="conflictTone">Roster bersih</small></article>
+        <article class="metric-card"><span class="metric-label">Imbangan M/A</span><strong id="balanceScore">0</strong><small>Beza Morning dan Afternoon</small></article>
+        <article class="metric-card staff-card" id="statEswari"></article>
+        <article class="metric-card staff-card" id="statAzrin"></article>
+      </section>
+
+      <section class="workspace">
+        <section class="roster-panel" aria-label="Jadual interaktif">
+          <div class="panel-head">
+            <div><h2>Jadual Interaktif</h2><p id="periodLabel">July 2026</p></div>
+            <div class="export-group">
+              <button id="printBtn" type="button">PDF</button>
+              <button id="excelBtn" type="button">Excel</button>
+              <button id="emailBtn" type="button">Email HR</button>
+            </div>
+          </div>
+          <div class="legend" aria-label="Shift legend">
+            <span class="legend-item shift-m">M</span><span class="legend-item shift-a">A</span><span class="legend-item shift-f">F</span><span class="legend-item shift-al">AL</span><span class="legend-item shift-wo">WO</span><span class="legend-item shift-mc">MC</span><span class="legend-item shift-el">EL</span><span class="legend-item shift-rl">RL</span>
+          </div>
+          <div class="table-wrap"><table id="rosterTable" class="roster-table"></table></div>
+        </section>
+
+        <aside class="side-stack">
+          <section class="side-panel" aria-label="Leave manager">
+            <div class="panel-head slim"><h2>Leave Manager</h2></div>
+            <form id="leaveForm" class="leave-form">
+              <label class="field"><span>Nama</span><select id="leaveStaff"></select></label>
+              <label class="field"><span>Tarikh</span><input id="leaveDate" type="date" required /></label>
+              <label class="field"><span>Jenis</span><select id="leaveType"><option value="AL">AL</option><option value="MC">MC</option><option value="EL">EL</option><option value="RL">RL</option><option value="WO">WO</option></select></label>
+              <div class="form-actions"><button class="primary" type="submit">Simpan</button><button id="clearLeaveBtn" type="button">Kosongkan</button></div>
+            </form>
+            <div id="leaveList" class="leave-list"></div>
+          </section>
+
+          <section class="side-panel" aria-label="Conflict checker">
+            <div class="panel-head slim"><h2>Conflict Checker</h2></div>
+            <div id="alertsList" class="alerts-list"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <dialog id="editDialog" class="edit-dialog">
+      <form method="dialog">
+        <div class="dialog-head"><div><span id="editDateLabel" class="eyebrow">Tarikh</span><h2 id="editStaffLabel">Staff</h2></div><button class="icon-button" value="cancel" aria-label="Tutup" type="submit">x</button></div>
+        <div id="shiftPicker" class="shift-picker"></div>
+        <menu class="dialog-actions"><button id="clearCellBtn" value="clear" type="button">Kosongkan</button><button class="primary" value="cancel" type="submit">Selesai</button></menu>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
